@@ -1,0 +1,19 @@
+package cn.iot.ipro.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@ControllerAdvice
+@ResponseBody
+public class ExceptionControllerConfig {
+    private static final Logger log = LoggerFactory.getLogger(ExceptionControllerConfig.class);
+
+    @ExceptionHandler
+    public ResultBean unknownException(Exception e) {
+        log.error("发生了未知异常", e.getMessage());
+        return ResultBean.error(-99, "系统出现错误, 请联系网站管理员!");
+    }
+}
