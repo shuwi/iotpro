@@ -1,8 +1,10 @@
 package cn.iot.ipro.dao;
 
-import cn.iot.ipro.entity.UserEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import cn.iot.ipro.entity.User;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    UserEntity findByUserName(String userName);
+@Repository
+public interface UserRepository extends CrudRepository<User, Long> {
+    User findByUsername(String username);
 }

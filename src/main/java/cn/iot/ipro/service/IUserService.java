@@ -1,8 +1,15 @@
 package cn.iot.ipro.service;
 
-import cn.iot.ipro.entity.UserEntity;
+import cn.iot.ipro.entity.User;
+import cn.iot.ipro.model.UserDto;
+
+import java.util.List;
 
 public interface IUserService {
-    Long addUser(UserEntity userEntity);
-    boolean userExisted(UserEntity userEntity);
+    User save(UserDto user);
+    List<User> findAll();
+    void delete(long id);
+    User findOne(String username);
+
+    User findById(Long id);
 }

@@ -1,30 +1,43 @@
 package cn.iot.ipro.controller;
 
-import cn.iot.ipro.config.ResultBean;
-import cn.iot.ipro.entity.UserEntity;
+import cn.iot.ipro.entity.User;
+import cn.iot.ipro.model.UserDto;
 import cn.iot.ipro.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/")
 public class UserController {
-    @Autowired
-    private IUserService userService;
+    private IUserService IUserService;
 
-    @RequestMapping("addUser")
-    public ResultBean addUser(@RequestBody @Valid UserEntity userEntity, BindingResult results) {
-        if (results.hasErrors())
-            return ResultBean.error(500, results.getFieldError().getDefaultMessage());
-        Long id = userService.addUser(userEntity);
-        if (id > 0)
-            return ResultBean.success();
-        else
-            return ResultBean.error(500, "user add error!");
+    @Autowired
+    public void setIUserService(cn.iot.ipro.service.IUserService IUserService) {
+        this.IUserService = IUserService;
     }
+
+    //@Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public List<User> listUser() {
+        return IUserService.findAll();
+    }
+
+    //@Secured("ROLE_USER")
+    @PreAuthorize("hasRole('USER')")
+    ////@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    public User getOne(@PathVariable(value = "id") Long id) {
+        return IUserService.findById(id);
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public User saveUser(@RequestBody UserDto user) {
+        return IUserService.save(user);
+    }
+
+
 }

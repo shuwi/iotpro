@@ -1,4 +1,4 @@
-package cn.iot.ipro.entity;
+package cn.iot.ipro.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

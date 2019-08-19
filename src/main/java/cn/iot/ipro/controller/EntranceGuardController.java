@@ -1,31 +1,37 @@
 package cn.iot.ipro.controller;
 
-import cn.iot.ipro.entity.CheckCodeResponse;
-import cn.iot.ipro.entity.EntranceGuardEntity;
-import cn.iot.ipro.entity.IsConnect;
-import cn.iot.ipro.entity.IsConnectResponse;
+import cn.iot.ipro.entity.*;
+import cn.iot.ipro.model.IsConnect;
+import cn.iot.ipro.model.IsConnectResponse;
 import cn.iot.ipro.service.ICheckCodeResponseService;
 import cn.iot.ipro.service.IEntranceGuardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Date;
 
-@RestController
+@Controller
 @RequestMapping("/eg/")
 public class EntranceGuardController {
-    @Autowired
     private IEntranceGuardService entranceGuardService;
-    @Autowired
     private ICheckCodeResponseService checkCodeResponseService;
+
+    @Autowired
+    public void setEntranceGuardService(IEntranceGuardService entranceGuardService) {
+        this.entranceGuardService = entranceGuardService;
+    }
+
+    @Autowired
+    public void setCheckCodeResponseService(ICheckCodeResponseService checkCodeResponseService) {
+        this.checkCodeResponseService = checkCodeResponseService;
+    }
 
     /**
      * 数据上传接口
+     *
      * @param params
      * @return
      * @throws IOException
@@ -37,7 +43,7 @@ public class EntranceGuardController {
         CheckCodeResponse checkCodeResponse = new CheckCodeResponse();
         checkCodeResponse.setUID(entranceGuardEntity.getUID());
 
-        if(entranceGuardService.addEntranceGuard(entranceGuardEntity) > 1)
+        if (entranceGuardService.addEntranceGuard(entranceGuardEntity) > 1)
             checkCodeResponse.setStatus(1);
         else
             checkCodeResponse.setStatus(0);
@@ -47,12 +53,13 @@ public class EntranceGuardController {
 
     /**
      * 设备通讯心跳接口 ，包括校时
+     *
      * @param params 示例 paramaters={"ViewId":"D2","UID":"1001"," UKey":"3F698DAC58","SN":"1701000110"}
      * @return IsConnectResponse
      * @throws IOException
      */
     @PostMapping("IsConnect")
-    public IsConnectResponse isConnect(@RequestParam("paramaters") String params) throws IOException{
+    public IsConnectResponse isConnect(@RequestParam("paramaters") String params) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         IsConnect isConnect = objectMapper.readValue(params, IsConnect.class);
         System.out.println(isConnect.getSN());
@@ -60,4 +67,5 @@ public class EntranceGuardController {
         isConnectResponse.setDateTime(new Date());
         return isConnectResponse;
     }
+
 }

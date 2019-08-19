@@ -2,6 +2,7 @@ package cn.iot.ipro.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,7 +14,13 @@ public class ExceptionControllerConfig {
 
     @ExceptionHandler
     public ResultBean unknownException(Exception e) {
-        log.error("发生了未知异常", e.getMessage());
-        return ResultBean.error(-99, "系统出现错误, 请联系网站管理员!");
+        log.error("unknownException："+ e.getMessage());
+        return ResultBean.error(-1, e.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResultBean authenticationException(AuthenticationException e){
+        log.error("authenticationException："+ e.getMessage());
+        return ResultBean.error(-2, e.getMessage());
     }
 }
