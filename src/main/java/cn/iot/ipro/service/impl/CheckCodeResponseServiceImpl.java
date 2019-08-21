@@ -12,8 +12,13 @@ import java.util.Date;
 @Service
 @Transactional
 public class CheckCodeResponseServiceImpl implements ICheckCodeResponseService {
-    @Autowired
     private CheckCodeResponseRepository checkCodeResponseRepository;
+
+    @Autowired
+    public void setCheckCodeResponseRepository(CheckCodeResponseRepository checkCodeResponseRepository) {
+        this.checkCodeResponseRepository = checkCodeResponseRepository;
+    }
+
     @Override
     public long addCheckCodeResponse(CheckCodeResponse checkCodeResponse) {
         checkCodeResponse.setResDate(new Date());

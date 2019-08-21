@@ -11,4 +11,6 @@ public class IproApplication {
         SpringApplication.run(IproApplication.class, args);
     }
 
+    public static class AccessTokenSuccessResService {
+    }
 }

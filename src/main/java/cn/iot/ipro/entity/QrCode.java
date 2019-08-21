@@ -3,6 +3,7 @@ package cn.iot.ipro.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -12,10 +13,12 @@ public class QrCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
+    @NotBlank(message = "用户ID不能为空")
     @NotNull(message = "用户ID不能为空")
     private String userId;
     @Column
-    @NotNull(message = "区域ID不能为空")
+    @NotBlank(message = "区域ID不能为空")
+    @NotNull(message = "用户ID不能为空")
     private String viewId;
     @Column
     private String begin;

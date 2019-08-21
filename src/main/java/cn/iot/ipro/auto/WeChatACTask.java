@@ -3,6 +3,7 @@ package cn.iot.ipro.auto;
 import cn.hutool.http.HttpUtil;
 import cn.iot.ipro.config.WeChatAccConfig;
 import cn.iot.ipro.entity.AccessTokenSuccessRes;
+import cn.iot.ipro.service.IAccessTokenSuccessResService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +19,16 @@ import java.util.HashMap;
 public class WeChatACTask {
     private static final Logger logger = LoggerFactory.getLogger(WeChatACTask.class);
     private WeChatAccConfig weChatAccConfig;
+    private IAccessTokenSuccessResService accessTokenSuccessResService;
 
     @Autowired
     public void setWeChatAccConfig(WeChatAccConfig weChatAccConfig) {
         this.weChatAccConfig = weChatAccConfig;
+    }
+
+    @Autowired
+    public void setAccessTokenSuccessResService(IAccessTokenSuccessResService accessTokenSuccessResService) {
+        this.accessTokenSuccessResService = accessTokenSuccessResService;
     }
 
     /**
@@ -37,8 +44,10 @@ public class WeChatACTask {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             AccessTokenSuccessRes accessTokenSuccessRes = objectMapper.readValue(res, AccessTokenSuccessRes.class);
-            System.out.println(accessTokenSuccessRes.getAccess_token());
-            System.out.println(accessTokenSuccessRes.getExpires_in());
+            accessTokenSuccessRes.setAppId(weChatAccConfig.getAppid());
+            accessTokenSuccessResService.addAccessTokenSuccessRes(accessTokenSuccessRes);
+            System.out.println(accessTokenSuccessRes.getAccessToken());
+            System.out.println(accessTokenSuccessRes.getExpiresIn());
         } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
