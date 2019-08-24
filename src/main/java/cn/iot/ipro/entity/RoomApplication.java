@@ -1,5 +1,7 @@
 package cn.iot.ipro.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,32 +18,47 @@ public class RoomApplication {
     @Column
     @NotBlank(message = "用户ID不能为空")
     @NotNull(message = "用户ID不能为空")
+    @JsonProperty("userId")
     private String userId;
     @Column
-    @NotBlank(message = "用户openId不能为空")
-    @NotNull(message = "用户openId为空")
+    @JsonProperty("openId")
     private String openId;
     @Column
     @NotBlank(message = "预约类型不能为空")
     @NotNull(message = "预约类型为空")
+    @JsonProperty("applyType")
     private String applyType;
     @Column
     @NotBlank(message = "用户姓名不能为空")
     @NotNull(message = "用户姓名为空")
+    @JsonProperty("userName")
     private String userName;
     @Column
     @NotBlank(message = "用户联系电话不能为空")
     @NotNull(message = "用户联系电话为空")
+    @JsonProperty("userPhone")
     private String userPhone;
     @Column
-    @NotNull(message = "开始时间不能为空")
-    private Date begin;
+    @NotBlank(message = "预约单位不能为空")
+    @NotNull(message = "预约单位为空")
+    @JsonProperty("userOrg")
+    private String userOrg;
     @Column
-    @NotNull(message = "结束时间不能为空")
-    private Date end;
+    @JsonProperty("guestTo")
+    private String guestTo;//被访问人
     @Column
+    @JsonProperty("applyDate")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date applyDate;
+    @Column
+    @NotNull(message = "时间段不能为空")
+    @JsonProperty("fromTo")
+    private String fromTo;
+    @Column
+    @JsonProperty("applyDes")
     private String applyDes;
     @Column
+    @JsonProperty("forbiddenReason")
     private String forbiddenReason;
     @Column
     private Date created;
@@ -50,5 +67,5 @@ public class RoomApplication {
     @Column
     private String modifiedBy;
     @Column
-    private int state;
+    private int state;//审核状态
 }

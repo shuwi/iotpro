@@ -27,6 +27,6 @@ public class RoomApplicationServiceImpl implements IRoomApplicationService {
 
     @Override
     public Page<RoomApplication> getList(Integer type, Pageable pageable) {
-        return roomApplicationRepository.findAllByState(type, pageable);
+        return roomApplicationRepository.findAllByStateOrderByIdDesc(type, pageable);
     }
 }

@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.iot</groupId>
     <artifactId>ipro</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>war</packaging>
     <name>iPro</name>
     <description>An iot project</description>

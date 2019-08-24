@@ -10,7 +10,4 @@ public class IproApplication {
     public static void main(String[] args) {
         SpringApplication.run(IproApplication.class, args);
     }
-
-    public static class AccessTokenSuccessResService {
-    }
 }
