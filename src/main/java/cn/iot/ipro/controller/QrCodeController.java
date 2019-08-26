@@ -4,7 +4,6 @@ import cn.hutool.crypto.symmetric.RC4;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.iot.ipro.entity.QrCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -47,12 +46,13 @@ public class QrCodeController {
 
     /**
      * 根据传入的二维码信息返回二维码base64数据
-     * @param qrCode 传入的二维码信息
+     *
+     * @param qrCode  传入的二维码信息
      * @param results 二维码base64数据
      * @return 二维码base64数据
      * @throws IOException 图片处理异常
      */
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "gating")
     @ResponseBody
     public ResponseEntity getQrCode(@RequestBody @Valid QrCode qrCode, BindingResult results) throws IOException {

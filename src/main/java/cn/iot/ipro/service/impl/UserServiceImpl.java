@@ -1,10 +1,12 @@
 package cn.iot.ipro.service.impl;
 
+import cn.iot.ipro.config.ResultBean;
 import cn.iot.ipro.dao.RoleRepository;
 import cn.iot.ipro.dao.UserRepository;
 import cn.iot.ipro.entity.Role;
 import cn.iot.ipro.entity.User;
 import cn.iot.ipro.model.UserDto;
+import cn.iot.ipro.service.IInviteCodeService;
 import cn.iot.ipro.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,14 +24,33 @@ import java.util.*;
 @Transactional
 public class UserServiceImpl implements UserDetailsService, IUserService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
 
-    @Autowired
     private RoleRepository roleRepository;
+
+    private IInviteCodeService inviteCodeService;
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setBcryptEncoder(BCryptPasswordEncoder bcryptEncoder) {
+        this.bcryptEncoder = bcryptEncoder;
+    }
+
+    @Autowired
+    public void setRoleRepository(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+
+    @Autowired
+    public void setInviteCodeService(IInviteCodeService inviteCodeService) {
+        this.inviteCodeService = inviteCodeService;
+    }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
@@ -71,20 +92,25 @@ public class UserServiceImpl implements UserDetailsService, IUserService {
     }
 
     @Override
-    public User save(UserDto user) {
+    public ResultBean save(UserDto user) {
+        if (inviteCodeService.getCodeByCodeValue(user.getInviteCode()) == null)
+            return ResultBean.error(-2, "邀请码错误或者不存在");
+
         if (findOne(user.getUsername()) != null)
-            return new User();
+            return ResultBean.error(-3, "该用户已存在");
+
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        newUser.setInviteCode(user.getInviteCode());
         Role role = roleRepository.findByName("USER");
         if (null == role) {
             role = new Role();
             role.setName("USER");
-            role.setDescription("普通用户");
+            role.setDescription("normal");
             roleRepository.save(role);
         }
         newUser.setRoles(Arrays.asList(role));
-        return userRepository.save(newUser);
+        return ResultBean.success(userRepository.save(newUser));
     }
 }

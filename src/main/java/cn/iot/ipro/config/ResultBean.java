@@ -2,13 +2,11 @@ package cn.iot.ipro.config;
 
 import lombok.Data;
 
-import java.util.Collection;
-
 @Data
 public class ResultBean<T> {
     private int code;
     private String message;
-    private Collection<T> data;
+    private T data;
 
     private ResultBean() {
 
@@ -28,7 +26,7 @@ public class ResultBean<T> {
         return resultBean;
     }
 
-    public static <V> ResultBean<V> success(Collection<V> data) {
+    public static <V> ResultBean<V> success(V data) {
         ResultBean resultBean = new ResultBean();
         resultBean.setCode(0);
         resultBean.setMessage("success");

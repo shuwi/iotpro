@@ -1,5 +1,6 @@
 package cn.iot.ipro.controller;
 
+import cn.iot.ipro.config.ResultBean;
 import cn.iot.ipro.entity.User;
 import cn.iot.ipro.model.UserDto;
 import cn.iot.ipro.service.IUserService;
@@ -35,9 +36,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public User saveUser(@RequestBody UserDto user) {
+    public ResultBean saveUser(@RequestBody UserDto user) {
         return IUserService.save(user);
     }
-
 
 }

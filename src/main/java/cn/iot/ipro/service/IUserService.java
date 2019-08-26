@@ -1,12 +1,14 @@
 package cn.iot.ipro.service;
 
+import cn.iot.ipro.config.ResultBean;
 import cn.iot.ipro.entity.User;
 import cn.iot.ipro.model.UserDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
-    User save(UserDto user);
+    ResultBean save(UserDto user);
 
     List<User> findAll();
 

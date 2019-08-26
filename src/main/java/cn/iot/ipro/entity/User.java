@@ -15,6 +15,8 @@ public class User {
     @JsonIgnore
     private long id;
     @Column
+    private String inviteCode;
+    @Column
     private String username;
     @Column
     @JsonIgnore

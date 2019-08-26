@@ -48,10 +48,9 @@ public class RoomApplication {
     private String guestTo;//被访问人
     @Column
     @JsonProperty("applyDate")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date applyDate;
     @Column
-    @NotNull(message = "时间段不能为空")
     @JsonProperty("fromTo")
     private String fromTo;
     @Column

@@ -21,12 +21,17 @@ public class RoomApplicationServiceImpl implements IRoomApplicationService {
     }
 
     @Override
+    public RoomApplication getRoomApplicationByID(long id){
+        return roomApplicationRepository.getOne(id);
+    }
+
+    @Override
     public void addRoomApplication(RoomApplication roomApplication) {
         roomApplicationRepository.save(roomApplication);
     }
 
     @Override
-    public Page<RoomApplication> getList(Integer type, Pageable pageable) {
-        return roomApplicationRepository.findAllByStateOrderByIdDesc(type, pageable);
+    public Page<RoomApplication> getList(Integer type, String applyType, Pageable pageable) {
+        return roomApplicationRepository.findAllByStateAndApplyTypeOrderByIdDesc(type, applyType, pageable);
     }
 }
