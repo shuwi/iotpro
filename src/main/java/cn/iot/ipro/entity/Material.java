@@ -28,7 +28,7 @@ public class Material {
     @Column
     @NotNull(message = "售价为空")
     private BigDecimal materialPrice;
-    @Column
+    @Column(nullable = false, columnDefinition = "text comment '缩略图'")
     @NotBlank(message = "缩略图不能为空")
     @NotNull(message = "缩略图为空")
     private String thumbnail;
