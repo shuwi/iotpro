@@ -21,7 +21,7 @@ public class RoomApplicationServiceImpl implements IRoomApplicationService {
     }
 
     @Override
-    public RoomApplication getRoomApplicationByID(long id){
+    public RoomApplication getRoomApplicationByID(long id) {
         return roomApplicationRepository.getOne(id);
     }
 
@@ -32,6 +32,6 @@ public class RoomApplicationServiceImpl implements IRoomApplicationService {
 
     @Override
     public Page<RoomApplication> getList(Integer type, String applyType, Pageable pageable) {
-        return roomApplicationRepository.findAllByStateAndApplyTypeOrderByIdDesc(type, applyType, pageable);
+        return roomApplicationRepository.findAllByStateAndApplyTypeLikeOrderByIdDesc(type, "%" + applyType + "%", pageable);
     }
 }

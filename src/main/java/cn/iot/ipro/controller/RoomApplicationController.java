@@ -2,6 +2,7 @@ package cn.iot.ipro.controller;
 
 import cn.iot.ipro.config.ResultBean;
 import cn.iot.ipro.entity.RoomApplication;
+import cn.iot.ipro.model.ApplyRequest;
 import cn.iot.ipro.model.Review;
 import cn.iot.ipro.service.IRoomApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,22 @@ public class RoomApplicationController {
         return ResultBean.success();
     }
 
+    @RequestMapping(value = "wechatnew")
+    @ResponseBody
+    public ResultBean addNew(@RequestBody @Valid RoomApplication roomApplication, BindingResult results) {
+        if (results.hasErrors())
+            return ResultBean.error(-2, Objects.requireNonNull(results.getFieldError()).getDefaultMessage());
+
+        roomApplication.setCreated(new Date());
+        roomApplication.setState(0);
+        roomApplicationService.addRoomApplication(roomApplication);
+        return ResultBean.success();
+    }
+
     @RequestMapping(value = "list")
-    public ResponseEntity getList(@RequestParam("state") int state, @RequestParam("applyType") String applyType, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return ResponseEntity.ok(roomApplicationService.getList(state, applyType, pageable));
+    public ResponseEntity getList(@RequestBody ApplyRequest params) {
+        Pageable pageable = PageRequest.of(params.getPageNo(), params.getPageSize());
+        return ResponseEntity.ok(roomApplicationService.getList(params.getState(), params.getApplyType(), pageable));
     }
 
     @RequestMapping(value = "review")
@@ -52,10 +65,12 @@ public class RoomApplicationController {
         if (null == roomApplication)
             return ResultBean.error(-1, "预约单不存在");
 
-        roomApplication.setState(review.isAgreed() ? 1 : -1);
+        roomApplication.setState(review.getAgreed());
         roomApplication.setForbiddenReason(review.getReason());
         roomApplication.setModifiedBy(review.getViewedBy());
         roomApplication.setModified(new Date());
+        roomApplication.setRoom(review.getRoom());
+        roomApplication.setPrice(review.getPrice());
         roomApplicationService.addRoomApplication(roomApplication);
         return ResultBean.success();
     }

@@ -9,14 +9,19 @@ import cn.iot.ipro.model.UserDto;
 import cn.iot.ipro.service.IInviteCodeService;
 import cn.iot.ipro.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import sun.misc.BASE64Encoder;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 
@@ -93,8 +98,6 @@ public class UserServiceImpl implements UserDetailsService, IUserService {
 
     @Override
     public ResultBean save(UserDto user) {
-        if (inviteCodeService.getCodeByCodeValue(user.getInviteCode()) == null)
-            return ResultBean.error(-2, "邀请码错误或者不存在");
 
         if (findOne(user.getUsername()) != null)
             return ResultBean.error(-3, "该用户已存在");
@@ -112,5 +115,48 @@ public class UserServiceImpl implements UserDetailsService, IUserService {
         }
         newUser.setRoles(Arrays.asList(role));
         return ResultBean.success(userRepository.save(newUser));
+    }
+
+    @Override
+    public ResultBean userInfoUpdate(UserDto user) {
+
+        User u = findOne(user.getUsername());
+        if (u == null)
+            return ResultBean.error(-1, "用户不存在");
+
+        if (!bcryptEncoder.matches(user.getPassword(), u.getPassword()))
+            return ResultBean.error(-2, "原始密码不正确");
+
+        if (!StringUtils.isEmpty(user.getNickname()))
+            u.setNickname(user.getNickname());
+        if (!StringUtils.isEmpty(user.getThumbnail()))
+            u.setThumbnail(user.getThumbnail());
+        if (!StringUtils.isEmpty(user.getNewpassword()))
+            u.setPassword(bcryptEncoder.encode(user.getNewpassword()));
+        return ResultBean.success(userRepository.save(u));
+    }
+
+    @Override
+    public ResultBean getUserThumbnail(UserDto user) {
+
+        User u = findOne(user.getUsername());
+        if (u == null)
+            return ResultBean.error(-1, "用户不存在");
+
+        if (StringUtils.isEmpty(u.getThumbnail())) {
+            try {
+                ClassPathResource classPathResource = new ClassPathResource("icon-avatar.png");
+                InputStream inputStream = classPathResource.getInputStream();
+                byte[] data = new byte[inputStream.available()];
+                inputStream.read(data);
+                inputStream.close();
+                BASE64Encoder encoder = new BASE64Encoder();
+                u.setThumbnail(encoder.encode(data));
+                // 通过base64来转化图片
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return ResultBean.success(u.getThumbnail());
     }
 }

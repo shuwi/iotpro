@@ -11,12 +11,8 @@ import javax.transaction.Transactional;
 @Service
 @Transactional
 public class InviteCodeServiceImpl implements IInviteCodeService {
-    private InviteCodeRepository inviteCodeRepository;
-
     @Autowired
-    public void setInviteCodeRepository(InviteCodeRepository inviteCodeRepository) {
-        this.inviteCodeRepository = inviteCodeRepository;
-    }
+    private InviteCodeRepository inviteCodeRepository;
 
     @Override
     public void addCode(InviteCode inviteCode) {

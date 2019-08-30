@@ -7,4 +7,5 @@ import org.springframework.data.domain.Pageable;
 public interface IMaterialService {
     void add(Material material);
     Page<Material> getList(String materialType, String materialName, Pageable pageable);
+    Material getInfoByID(Long id);
 }

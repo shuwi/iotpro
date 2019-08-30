@@ -27,6 +27,11 @@ public class MaterialServiceImpl implements IMaterialService {
 
     @Override
     public Page<Material> getList(String materialType, String materialName, Pageable pageable) {
-        return materialRepository.findAllByMaterialTypeLikeOrMaterialNameLikeOrderByIdDesc("%" + materialType + "%", "%" + materialName + "%", pageable);
+        return materialRepository.findAllByMaterialTypeLikeAndMaterialNameLikeOrderByIdDesc("%" + materialType + "%", "%" + materialName + "%", pageable);
+    }
+
+    @Override
+    public Material getInfoByID(Long id){
+        return materialRepository.getOne(id);
     }
 }

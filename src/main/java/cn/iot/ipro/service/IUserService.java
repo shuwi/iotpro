@@ -10,6 +10,10 @@ import java.util.Map;
 public interface IUserService {
     ResultBean save(UserDto user);
 
+    ResultBean userInfoUpdate(UserDto user);
+
+    ResultBean getUserThumbnail(UserDto user);
+
     List<User> findAll();
 
     void delete(long id);

@@ -40,4 +40,15 @@ public class UserController {
         return IUserService.save(user);
     }
 
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResultBean update(@RequestBody UserDto user) {
+        return IUserService.userInfoUpdate(user);
+    }
+
+    @RequestMapping(value = "/thumbnail", method = RequestMethod.POST)
+    public ResultBean userInfo(@RequestBody UserDto user) {
+        return IUserService.getUserThumbnail(user);
+    }
+
+
 }

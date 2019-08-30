@@ -19,6 +19,11 @@ public class User {
     @Column
     private String username;
     @Column
+    private String nickname;
+    @JsonIgnore
+    @Column(columnDefinition = "longtext comment '用户头像'")
+    private String thumbnail;
+    @Column
     @JsonIgnore
     private String password;
     @Column

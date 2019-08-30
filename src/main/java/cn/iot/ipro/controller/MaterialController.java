@@ -3,8 +3,6 @@ package cn.iot.ipro.controller;
 import cn.iot.ipro.config.ResultBean;
 import cn.iot.ipro.entity.Material;
 import cn.iot.ipro.service.IMaterialService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 
@@ -26,7 +22,7 @@ import java.util.Objects;
 @RequestMapping("/material/")
 public class MaterialController {
     private IMaterialService materialService;
-    private static final Logger logger = LoggerFactory.getLogger(MaterialController.class);
+
     @Autowired
     public void setMaterialService(IMaterialService materialService) {
         this.materialService = materialService;
@@ -47,24 +43,18 @@ public class MaterialController {
     @RequestMapping(value = "list")
     @ResponseBody
     public ResponseEntity getList(@RequestParam("materialType") String materialType, @RequestParam("materialName") String materialName, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
+        System.err.println(materialType);
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return ResponseEntity.ok(materialService.getList(materialType, materialName, pageable));
     }
 
+    @CrossOrigin(origins = "*", maxAge = 3600)
     @RequestMapping(value = "upload")
     @ResponseBody
     public String upload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return "文件为空";
+            return null;
         }
-
-        // 获取文件名
-        String fileName = file.getOriginalFilename();
-        logger.info("上传的文件名为：" + fileName);
-
-        // 获取文件的后缀名
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        logger.info("上传的后缀名为：" + suffixName);
         String data = "";
         if (!file.isEmpty()) {
             try {
@@ -75,7 +65,6 @@ public class MaterialController {
                 e.printStackTrace();
             }
         }
-        logger.info("base64：" + data);
         return data;
     }
 

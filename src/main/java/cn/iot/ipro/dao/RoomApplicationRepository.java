@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoomApplicationRepository extends JpaRepository<RoomApplication, Long> {
-    Page<RoomApplication> findAllByStateAndApplyTypeOrderByIdDesc(int state, String applyType, Pageable pageable);
+    Page<RoomApplication> findAllByStateAndApplyTypeLikeOrderByIdDesc(int state, String applyType, Pageable pageable);
 }

@@ -46,8 +46,8 @@ public class WeChatACTask {
             AccessTokenSuccessRes accessTokenSuccessRes = objectMapper.readValue(res, AccessTokenSuccessRes.class);
             accessTokenSuccessRes.setAppId(weChatAccConfig.getAppid());
             accessTokenSuccessResService.addAccessTokenSuccessRes(accessTokenSuccessRes);
-            System.out.println(accessTokenSuccessRes.getAccessToken());
-            System.out.println(accessTokenSuccessRes.getExpiresIn());
+//            System.out.println(accessTokenSuccessRes.getAccessToken());
+//            System.out.println(accessTokenSuccessRes.getExpiresIn());
         } catch (Exception ex) {
             logger.error(ex.getMessage());
         }

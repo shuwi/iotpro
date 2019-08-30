@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -67,4 +68,10 @@ public class RoomApplication {
     private String modifiedBy;
     @Column
     private int state;//审核状态
+    @Column
+    private int applyNum;//预约人数
+    @Column
+    private String room;
+    @Column(nullable = true, columnDefinition = "decimal(11,2)")
+    public BigDecimal price;
 }
